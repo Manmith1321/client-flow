@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClientFlow - Freelance Project Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  <!-- Toasts -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Auth View -->
+  <div id="auth-view" class="view auth-view active">
+    <!-- Auth Toggle Tabs -->
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab active">Login</button>
+        <button id="tab-register" class="auth-tab">Register</button>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form active">
+        <h2>Welcome Back</h2>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login <span class="spinner hidden"></span></button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form">
+        <h2>Create Account</h2>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="register-email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="register-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Register <span class="spinner hidden"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Layout (Sidebar + Content) -->
+  <div id="app-layout" class="app-layout view hidden">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>ClientFlow</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="nav-link active" data-target="dashboard-view">Dashboard</a></li>
+          <li><a href="#" class="nav-link" data-target="clients-view">Clients</a></li>
+          <li><a href="#" class="nav-link" data-target="projects-view">Projects</a></li>
+          <li><a href="#" class="nav-link" data-target="tasks-view">Tasks</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="btn btn-outline w-100" style="margin-bottom:0.5rem">Toggle Dark Mode</button>
+        <button id="logout-btn" class="btn btn-outline w-100">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Dashboard View -->
+      <section id="dashboard-view" class="content-view active">
+        <header class="content-header">
+          <h2>Dashboard</h2>
+          <div>
+            <button class="btn btn-outline" id="btn-export-data">Export JSON</button>
+            <button class="btn btn-primary" id="refresh-dashboard">Refresh</button>
+          </div>
+        </header>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Total Clients</h3>
+            <p id="stat-clients" class="stat-value">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Active Projects</h3>
+            <p id="stat-active-projects" class="stat-value">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Completed Projects</h3>
+            <p id="stat-completed-projects" class="stat-value">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p id="stat-revenue" class="stat-value">$0</p>
+          </div>
+        </div>
+        <div class="chart-container" style="margin-top: 2rem; background: var(--bg-card); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+          <canvas id="dashboard-chart" style="max-height: 300px; width: 100%;"></canvas>
+        </div>
+      </section>
+
+      <!-- Clients View -->
+      <section id="clients-view" class="content-view hidden">
+        <header class="content-header">
+          <h2>Clients</h2>
+          <div style="display:flex; gap:1rem;">
+            <input type="text" id="filter-clients" class="form-control" placeholder="Search clients...">
+            <button class="btn btn-primary" id="btn-add-client">+ Add Client</button>
+          </div>
+        </header>
+        <div class="table-container">
+          <table class="data-table" id="clients-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Projects View -->
+      <section id="projects-view" class="content-view hidden">
+        <header class="content-header">
+          <h2>Projects</h2>
+          <div style="display:flex; gap:0.5rem;">
+            <input type="text" id="filter-projects" class="form-control" placeholder="Search projects...">
+            <select id="filter-project-status" class="form-control">
+              <option value="">All Statuses</option>
+              <option value="Completed">Completed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <button class="btn btn-primary" id="btn-add-project">+ Add Project</button>
+          </div>
+        </header>
+        <div class="table-container">
+          <table class="data-table" id="projects-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Due</th>
+                <th>Progress</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Tasks View -->
+      <section id="tasks-view" class="content-view hidden">
+        <header class="content-header">
+          <h2>Tasks Overview</h2>
+          <div class="filter-group">
+            <label>Select Project:</label>
+            <select id="task-project-select" class="form-control" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem; margin-top: 0.5rem;">
+              <option value="">-- Choose Project --</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="btn-add-task" disabled>+ Add Task</button>
+        </header>
+        <div class="todo-container" id="tasks-list">
+          <p class="text-muted">Select a project to view tasks.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modals -->
+  
+  <!-- Add/Edit Client Modal -->
+  <div id="modal-client" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-client-title">Add Client</h3>
+        <span class="close" data-modal="modal-client">&times;</span>
+      </div>
+      <form id="form-client">
+        <input type="hidden" id="client-id">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="client-name" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="client-email">
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input type="text" id="client-company">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit Project Modal -->
+  <div id="modal-project" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-project-title">Add Project</h3>
+        <span class="close" data-modal="modal-project">&times;</span>
+      </div>
+      <form id="form-project">
+        <input type="hidden" id="project-id">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="project-title" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="project-desc"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Client</label>
+          <select id="project-client-id" required></select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="project-status">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Payment</label>
+          <select id="project-payment">
+            <option value="Unpaid">Unpaid</option>
+            <option value="Paid">Paid</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="project-due">
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="project-notes"></textarea>
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+          <input type="checkbox" id="project-archived">
+          <label style="margin:0;">Mark as Archived</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div id="modal-task" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Task</h3>
+        <span class="close" data-modal="modal-task">&times;</span>
+      </div>
+      <form id="form-task">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="task-title" required>
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="task-due">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save Task</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
